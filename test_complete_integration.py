@@ -1,6 +1,6 @@
 """
-Complete Integration Test - 5 Pillar System
-Tests: Core → Workflow Executor → Bucket/Karma
+Complete Integration Test - 8 Pillar System
+Tests: Core → Bucket → Karma → Workflow → UAO → Insight Core → Insight Flow → PRANA
 """
 
 import requests
@@ -11,36 +11,54 @@ BASE_URLS = {
     "karma": "http://localhost:8000",
     "bucket": "http://localhost:8001",
     "core": "http://localhost:8002",
-    "workflow": "http://localhost:8003"
+    "workflow": "http://localhost:8003",
+    "uao": "http://localhost:8004",
+    "insight": "http://localhost:8005",
+    "insight_flow_bridge": "http://localhost:8006",
+    "insight_flow_backend": "http://localhost:8007"
 }
 
 def test_health_checks():
     """Test 1: Verify all services are running"""
-    print("\n🏥 [TEST 1] Health Checks")
+    print("\n🏥 [TEST 1] Health Checks (8 Services)")
     print("=" * 60)
     
     services = {
         "Karma": f"{BASE_URLS['karma']}/health",
         "Bucket": f"{BASE_URLS['bucket']}/health",
         "Core": f"{BASE_URLS['core']}/health",
-        "Workflow Executor": f"{BASE_URLS['workflow']}/healthz"
+        "Workflow Executor": f"{BASE_URLS['workflow']}/healthz",
+        "UAO": f"{BASE_URLS['uao']}/docs",
+        "Insight Core": f"{BASE_URLS['insight']}/health",
+        "Insight Flow Bridge": f"{BASE_URLS['insight_flow_bridge']}/health",
+        "Insight Flow Backend": f"{BASE_URLS['insight_flow_backend']}/health"
     }
     
     all_healthy = True
+    required_services = 0
     for name, url in services.items():
+        is_optional = name in ["Insight Flow Backend"]
         try:
             response = requests.get(url, timeout=5)
             if response.status_code == 200:
                 print(f"✅ {name}: HEALTHY")
+                if not is_optional:
+                    required_services += 1
             elif response.status_code == 404 and name == "Karma":
                 print(f"✅ {name}: HEALTHY (service active)")
+                required_services += 1
             else:
-                print(f"❌ {name}: UNHEALTHY (status {response.status_code})")
-                all_healthy = False
+                status = "⚠️" if is_optional else "❌"
+                print(f"{status} {name}: UNHEALTHY (status {response.status_code})")
+                if not is_optional:
+                    all_healthy = False
         except Exception as e:
-            print(f"❌ {name}: OFFLINE ({str(e)})")
-            all_healthy = False
+            status = "⚠️" if is_optional else "❌"
+            print(f"{status} {name}: OFFLINE ({str(e)[:50]})")
+            if not is_optional:
+                all_healthy = False
     
+    print(f"\n📊 Required services: {required_services}/7 (Backend optional)")
     return all_healthy
 
 def test_workflow_execution():
@@ -56,11 +74,11 @@ def test_workflow_execution():
         "data": {
             "workflow_type": "workflow",
             "payload": {
-                "trace_id": trace_id,  # Also pass inside payload for engine
+                "trace_id": trace_id,
                 "action_type": "task",
                 "user_id": "test_user",
                 "title": "Integration Test Task",
-                "description": "Testing 5-pillar integration"
+                "description": "Testing 8-pillar integration"
             }
         }
     }
@@ -80,7 +98,6 @@ def test_workflow_execution():
             return True, result.get('trace_id')
         else:
             print(f"❌ Workflow execution failed: {response.status_code}")
-            print(f"   Response: {response.text}")
             return False, None
     except Exception as e:
         print(f"❌ Workflow execution error: {str(e)}")
@@ -91,7 +108,7 @@ def test_bucket_logging(trace_id):
     print("\n📦 [TEST 3] Bucket Event Logging")
     print("=" * 60)
     
-    time.sleep(2)  # Wait for async logging
+    time.sleep(2)
     
     try:
         response = requests.get(f"{BASE_URLS['bucket']}/core/events?limit=10", timeout=5)
@@ -101,9 +118,6 @@ def test_bucket_logging(trace_id):
             
             if workflow_events:
                 print(f"✅ Bucket logged {len(workflow_events)} workflow event(s)")
-                latest = workflow_events[-1]
-                print(f"   Latest trace_id: {latest.get('trace_id')}")
-                print(f"   Action type: {latest.get('action_type')}")
                 return True
             else:
                 print(f"⚠️  No workflow events found in Bucket")
@@ -120,7 +134,7 @@ def test_karma_tracking():
     print("\n⚖️  [TEST 4] Karma Behavioral Tracking")
     print("=" * 60)
     
-    time.sleep(2)  # Wait for async logging
+    time.sleep(2)
     
     try:
         response = requests.get(f"{BASE_URLS['karma']}/api/v1/karma/test_user", timeout=5)
@@ -131,14 +145,14 @@ def test_karma_tracking():
             return True
         else:
             print(f"⚠️  Karma data not found (may be first run)")
-            return True  # Not a failure, just no data yet
+            return True
     except Exception as e:
         print(f"❌ Karma check error: {str(e)}")
         return False
 
 def test_core_integration():
     """Test 5: Test Core with workflow trigger"""
-    print("\n🧠 [TEST 5] Core Integration (with workflow trigger)")
+    print("\n🧠 [TEST 5] Core Integration")
     print("=" * 60)
     
     payload = {
@@ -158,13 +172,6 @@ def test_core_integration():
             result = response.json()
             print(f"✅ Core processed task successfully")
             print(f"   Task ID: {result.get('task_id')}")
-            print(f"   Status: {result.get('status')}")
-            
-            # Check if workflow was triggered (in agent output)
-            agent_output = result.get('agent_output', {})
-            if agent_output.get('requires_workflow'):
-                print(f"   🔄 Workflow triggered: {agent_output.get('workflow_action_type')}")
-            
             return True
         else:
             print(f"❌ Core task failed: {response.status_code}")
@@ -173,10 +180,63 @@ def test_core_integration():
         print(f"❌ Core integration error: {str(e)}")
         return False
 
+def test_uao_integration():
+    """Test 6: UAO orchestration"""
+    print("\n🎼 [TEST 6] UAO Action Orchestration")
+    print("=" * 60)
+    
+    try:
+        response = requests.get(f"{BASE_URLS['uao']}/docs", timeout=5)
+        if response.status_code == 200:
+            print(f"✅ UAO service operational")
+            return True
+        else:
+            print(f"❌ UAO service check failed: {response.status_code}")
+            return False
+    except Exception as e:
+        print(f"❌ UAO check error: {str(e)}")
+        return False
+
+def test_insight_core():
+    """Test 7: Insight Core security"""
+    print("\n🔒 [TEST 7] Insight Core Security")
+    print("=" * 60)
+    
+    try:
+        response = requests.get(f"{BASE_URLS['insight']}/health", timeout=5)
+        if response.status_code == 200:
+            print(f"✅ Insight Core security layer active")
+            return True
+        else:
+            print(f"❌ Insight Core check failed: {response.status_code}")
+            return False
+    except Exception as e:
+        print(f"❌ Insight Core error: {str(e)}")
+        return False
+
+def test_insight_flow():
+    """Test 8: Insight Flow routing"""
+    print("\n🧭 [TEST 8] Insight Flow Intelligent Routing")
+    print("=" * 60)
+    
+    try:
+        response = requests.get(f"{BASE_URLS['insight_flow_bridge']}/health", timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            mode = data.get('mode', 'unknown')
+            print(f"✅ Insight Flow Bridge active (mode: {mode})")
+            return True
+        else:
+            print(f"❌ Insight Flow check failed: {response.status_code}")
+            return False
+    except Exception as e:
+        print(f"❌ Insight Flow error: {str(e)}")
+        return False
+
 def main():
     print("\n" + "=" * 60)
-    print("🚀 5-PILLAR INTEGRATION TEST")
-    print("   Core + Bucket + Karma + PRANA + Workflow Executor")
+    print("🚀 8-PILLAR INTEGRATION TEST")
+    print("   Core + Bucket + Karma + PRANA + Workflow + UAO + Insight + Insight Flow")
     print("=" * 60)
     
     results = []
@@ -205,6 +265,15 @@ def main():
     # Test 5: Core integration
     results.append(("Core Integration", test_core_integration()))
     
+    # Test 6: UAO orchestration
+    results.append(("UAO Orchestration", test_uao_integration()))
+    
+    # Test 7: Insight Core security
+    results.append(("Insight Core Security", test_insight_core()))
+    
+    # Test 8: Insight Flow routing
+    results.append(("Insight Flow Routing", test_insight_flow()))
+    
     # Summary
     print("\n" + "=" * 60)
     print("📊 TEST SUMMARY")
@@ -218,10 +287,11 @@ def main():
         print(f"{status} - {test_name}")
     
     print(f"\n🎯 Results: {passed}/{total} tests passed ({int(passed/total*100)}%)")
+    print(f"   Required: 7/8 services (Insight Flow Backend optional)")
     
     if passed == total:
         print("\n🎉 SUCCESS! All systems integrated and operational!")
-        print("   ✅ 5-Pillar architecture fully functional")
+        print("   ✅ 8-Pillar architecture fully functional")
     elif passed >= total * 0.8:
         print("\n⚠️  MOSTLY WORKING - Some tests failed but core functionality OK")
     else:

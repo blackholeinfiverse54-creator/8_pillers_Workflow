@@ -79,3 +79,49 @@
 2026-01-31 14:08:48,041 - STATE=completed: test_result_1769848722 
 2026-01-31 14:08:48,298 - Bucket returned 422 for action test_result_1769848722
 2026-01-31 14:08:48,562 - Karma returned 500 for action test_result_1769848722
+2026-01-31 14:09:36,058 - ACTION_RECEIVED: test_action_1769848774
+2026-01-31 14:09:36,058 - STATE=requested: test_action_1769848774 
+2026-01-31 14:09:36,343 - UAO event logged to Bucket: test_action_1769848774 [requested]
+2026-01-31 14:09:36,705 - Karma returned 500 for action test_action_1769848774
+2026-01-31 14:09:36,705 - STATE=executing: test_action_1769848774 
+2026-01-31 14:09:36,979 - UAO event logged to Bucket: test_action_1769848774 [executing]
+2026-01-31 14:09:37,290 - Karma returned 500 for action test_action_1769848774
+2026-01-31 14:09:37,290 - COMMAND_EMITTED: {"command": "SEND_MESSAGE", "action_id": "test_action_1769848774", "payload": {"user_id": "test_user_uao", "to": "+1234567890", "text": "Test message from UAO integration test"}}
+2026-01-31 14:09:44,408 - ACTION_RECEIVED: test_result_1769848782
+2026-01-31 14:09:44,408 - STATE=requested: test_result_1769848782 
+2026-01-31 14:09:44,679 - UAO event logged to Bucket: test_result_1769848782 [requested]
+2026-01-31 14:09:44,947 - Karma returned 500 for action test_result_1769848782
+2026-01-31 14:09:44,947 - STATE=executing: test_result_1769848782 
+2026-01-31 14:09:45,200 - UAO event logged to Bucket: test_result_1769848782 [executing]
+2026-01-31 14:09:45,463 - Karma returned 500 for action test_result_1769848782
+2026-01-31 14:09:45,464 - COMMAND_EMITTED: {"command": "SEND_MESSAGE", "action_id": "test_result_1769848782", "payload": {"user_id": "test_user_result", "to": "+1234567890", "text": "Test"}}
+2026-01-31 14:09:48,027 - STATE=completed: test_result_1769848782 
+2026-01-31 14:09:48,295 - UAO event logged to Bucket: test_result_1769848782 [completed]
+2026-01-31 14:09:48,571 - Karma returned 500 for action test_result_1769848782
+2026-01-31 14:09:59,971 - ACTION_RECEIVED: test_action_1769848797
+2026-01-31 14:09:59,971 - STATE=requested: test_action_1769848797 
+2026-01-31 14:10:00,227 - UAO event logged to Bucket: test_action_1769848797 [requested]
+2026-01-31 14:10:00,510 - Karma returned 500 for action test_action_1769848797
+2026-01-31 14:10:00,511 - STATE=executing: test_action_1769848797 
+2026-01-31 14:10:00,769 - UAO event logged to Bucket: test_action_1769848797 [executing]
+2026-01-31 14:10:01,061 - Karma returned 500 for action test_action_1769848797
+2026-01-31 14:10:01,061 - COMMAND_EMITTED: {"command": "SEND_MESSAGE", "action_id": "test_action_1769848797", "payload": {"user_id": "test_user_uao", "to": "+1234567890", "text": "Test message from UAO integration test"}}
+2026-01-31 14:10:08,199 - ACTION_RECEIVED: test_result_1769848806
+2026-01-31 14:10:08,199 - STATE=requested: test_result_1769848806 
+2026-01-31 14:10:08,457 - UAO event logged to Bucket: test_result_1769848806 [requested]
+2026-01-31 14:10:08,758 - Karma returned 500 for action test_result_1769848806
+2026-01-31 14:10:08,759 - STATE=executing: test_result_1769848806 
+2026-01-31 14:10:09,019 - UAO event logged to Bucket: test_result_1769848806 [executing]
+2026-01-31 14:10:09,287 - Karma returned 500 for action test_result_1769848806
+2026-01-31 14:10:09,288 - COMMAND_EMITTED: {"command": "SEND_MESSAGE", "action_id": "test_result_1769848806", "payload": {"user_id": "test_user_result", "to": "+1234567890", "text": "Test"}}
+2026-01-31 14:10:11,824 - STATE=completed: test_result_1769848806 
+2026-01-31 14:10:12,083 - UAO event logged to Bucket: test_result_1769848806 [completed]
+2026-01-31 14:10:12,367 - Karma returned 500 for action test_result_1769848806
+2026-01-31 14:11:26,247 - ACTION_RECEIVED: verify_integration
+2026-01-31 14:11:26,247 - STATE=requested: verify_integration 
+2026-01-31 14:11:26,491 - UAO event logged to Bucket: verify_integration [requested]
+2026-01-31 14:11:26,781 - Karma returned 500 for action verify_integration
+2026-01-31 14:11:26,781 - STATE=executing: verify_integration 
+2026-01-31 14:11:27,012 - UAO event logged to Bucket: verify_integration [executing]
+2026-01-31 14:11:27,286 - Karma returned 500 for action verify_integration
+2026-01-31 14:11:27,287 - COMMAND_EMITTED: {"command": "SEND_MESSAGE", "action_id": "verify_integration", "payload": {"user_id": "test"}}

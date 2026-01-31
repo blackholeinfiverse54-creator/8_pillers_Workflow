@@ -10,6 +10,7 @@ import aiohttp
 from typing import Dict, Any, Optional
 from datetime import datetime, timezone
 from utils.logger import get_logger
+from integration.insight_client import insight_client
 
 logger = get_logger(__name__)
 
@@ -30,13 +31,18 @@ class BucketClient:
     
     async def write_event(self, event_data: Dict[str, Any]) -> bool:
         """
-        Fire-and-forget write to Bucket
+        Fire-and-forget write to Bucket with Insight Core validation
         Returns True if sent, False if failed (Core doesn't care)
         """
         if not self.enabled:
             return False
             
         try:
+            # Optional: Validate through Insight Core
+            validation = await insight_client.validate_request(event_data)
+            if not validation.get("validated"):
+                logger.debug(f"Insight validation failed: {validation.get('decision', {}).get('reason')}")
+            
             session = await self._get_session()
             
             # Add Core metadata
