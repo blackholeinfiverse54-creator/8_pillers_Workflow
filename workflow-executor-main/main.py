@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 import traceback
 import asyncio
 from datetime import datetime
+from contextlib import asynccontextmanager
 
 from contracts.workflow_request import WorkflowExecuteRequest
 from execution_engine.guard import should_execute
@@ -13,24 +14,28 @@ from integration.karma_client import karma_client
 
 logger = get_logger()
 
+# -------------------------------------------------
+# Lifespan Event Handler (Modern FastAPI)
+# -------------------------------------------------
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    logger.info(
+        f"SERVICE_STARTUP | service={settings.service_name} | env={settings.environment}"
+    )
+    yield
+    # Shutdown (if needed)
+    pass
+
 app = FastAPI(
     title="Workflow Executor",
     description="Deterministic execution layer for assistant workflows",
     version="1.0.0",
+    lifespan=lifespan
 )
 
 # Port Configuration: 8003 (Karma=8000, Bucket=8001, Core=8002)
 WORKFLOW_EXECUTOR_PORT = 8003
-
-# -------------------------------------------------
-# Startup
-# -------------------------------------------------
-
-@app.on_event("startup")
-def startup_event():
-    logger.info(
-        f"SERVICE_STARTUP | service={settings.service_name} | env={settings.environment}"
-    )
 
 # -------------------------------------------------
 # Health Check (MANDATORY FOR RENDER)

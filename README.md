@@ -1,34 +1,44 @@
-# 🚀 BHIV Core ↔ Bucket ↔ Karma ↔ PRANA ↔ Workflow ↔ UAO ↔ Insight Integration System
+# 🚀 BHIV AI Platform: 8-Pillar Infrastructure + Model Layers
 
-**Status**: ✅ **PRODUCTION READY** | **Test Results**: 6/6 Passing (100%) ✅  
-**Architecture**: Seven-tier AI orchestration platform with RL-based intelligence + behavioral telemetry + workflow execution + action orchestration + security enforcement  
-**Last Updated**: 2026-01-31 | **Version**: 2.2.0
+**Status**: ✅ **PRODUCTION READY** | **Architecture**: 8 Pillars + Layer 1 (Workflow Blackhole)  
+**Last Updated**: 2026-02-02 | **Version**: 3.0.0
 
 ## 🎯 System Overview
 
-Complete integration of eight AI systems:
-- **Core (8002)**: AI Decision Engine with UCB-based agent selection & multi-modal processing
-- **Bucket (8001)**: Constitutional governance, audit trail, and event storage
-- **Karma (8000)**: Q-learning behavioral tracking with karma computation
-- **PRANA (Frontend)**: User behavior telemetry & cognitive state tracking
-- **Workflow Executor (8003)**: Deterministic real-world action execution
-- **UAO (8004)**: Unified action orchestration & lifecycle management
-- **Insight Core (8005)**: JWT security enforcement & replay attack prevention
-- **Insight Flow (8006/8007)**: Intelligent agent routing with Q-learning & Karma weighting **[NEW]**
+### 8-Pillar Infrastructure (Foundation)
+Core infrastructure services that power all model layers:
+
+1. **Karma (8000)**: Q-learning behavioral tracking & karma computation
+2. **Bucket (8001)**: Constitutional governance, audit trail & event storage
+3. **Core (8002)**: AI Decision Engine with UCB-based agent selection
+4. **Workflow Executor (8003)**: Deterministic action execution
+5. **UAO (8004)**: Unified action orchestration & lifecycle management
+6. **Insight Core (8005)**: JWT security & replay attack prevention
+7. **Insight Flow (8006/8007)**: Intelligent agent routing with Q-learning
+8. **PRANA (Frontend)**: User behavior telemetry & cognitive state tracking
+
+### Model Layers (Built on 8 Pillars)
+Business applications that leverage the infrastructure:
+
+**Layer 1: Workflow Blackhole (8008 + 5001 + 5173)** ✅ **ACTIVE**
+- **Type**: Workforce Management System
+- **Components**: Bridge (8008), Backend (5001), Frontend (5173)
+- **Features**: Attendance, Tasks, Salary, Monitoring, Leave Management
+- **Integration**: Uses all 8 pillars via fire-and-forget pattern
+- **Status**: Production ready with full pillar integration
+
+**Future Layers**: HR Management, CRM, Project Management, Inventory, Finance
 
 ### Key Features
-✅ **8-Pillar Architecture**: Core + Bucket + Karma + PRANA + Workflow + UAO + Insight + Insight Flow **[NEW]**  
-✅ **Security Layer**: JWT validation + replay attack prevention (Insight Core) **[NEW]**  
-✅ **Deep Integration**: Core → Insight → Bucket with dual-path redundancy  
-✅ **Workflow Execution**: Deterministic task/email/WhatsApp/AI/reminder execution  
-✅ **Action Orchestration**: High-level action lifecycle management (requested → executing → completed/failed)  
-✅ **PRANA Telemetry**: Real-time user behavior tracking (7 cognitive states)  
-✅ **Fire-and-Forget**: Non-blocking async operations (2s timeout, zero latency impact)  
-✅ **Zero Regression**: Original functionality preserved (100% backward compatible)  
-✅ **Graceful Degradation**: Each service works independently (no circular dependencies)  
-✅ **Complete Audit Trail**: Every action logged permanently (immutable audit)  
+✅ **8-Pillar Infrastructure**: Reusable foundation for all model layers  
+✅ **Layer 1 Active**: Workflow Blackhole (Workforce Management)  
+✅ **Scalable Architecture**: Multiple layers can run simultaneously  
+✅ **Fire-and-Forget Integration**: Non-blocking async operations  
+✅ **Security Layer**: JWT validation + replay attack prevention  
+✅ **Complete Audit Trail**: Every action logged permanently  
 ✅ **RL Intelligence**: UCB agent selection + Q-learning behavioral tracking  
-✅ **Multi-Modal**: Text, PDF, image, audio processing with knowledge base integration
+✅ **Graceful Degradation**: Layers work independently if pillars unavailable  
+✅ **Zero Regression**: Original functionality preserved (100% backward compatible)
 
 ---
 
@@ -162,7 +172,38 @@ start_insight_flow_fixed.bat
 ✅ Health check: `curl http://localhost:8007/health`  
 ✅ **Note**: Optional - enables full Q-learning routing, Karma integration, analytics
 
-**Startup Time**: ~80 seconds total (all services: 10s each)
+---
+
+## 🏭 Layer 1: Workflow Blackhole (Workforce Management)
+
+**Step 9: Start Workflow Bridge (Terminal 9)**
+```bash
+cd "workflow-blackhole-main\bridge"
+python workflow_bridge.py
+```
+✅ Wait for: "Uvicorn running on http://0.0.0.0:8008"  
+✅ Bridge runs on: **http://localhost:8008**  
+✅ Health check: `curl http://localhost:8008/health`
+
+**Step 10: Start Workflow Backend (Terminal 10)**
+```bash
+cd "workflow-blackhole-main\server"
+npm start
+```
+✅ Wait for: "Server running on port 5001"  
+✅ Backend runs on: **http://localhost:5001**  
+✅ Health check: `curl http://localhost:5001/api/ping`
+
+**Step 11: Start Workflow Frontend (Terminal 11)**
+```bash
+cd "workflow-blackhole-main\client"
+npm run dev
+```
+✅ Wait for: "Local: http://localhost:5173"  
+✅ Frontend runs on: **http://localhost:5173**  
+✅ Access: Open browser to http://localhost:5173
+
+**Startup Time**: ~110 seconds total (8 pillars + Layer 1)
 
 ### 🧪 Testing Integration
 
