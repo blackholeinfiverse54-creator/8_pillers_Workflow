@@ -115,6 +115,11 @@ from pathlib import Path
 from datetime import datetime, timezone
 import uvicorn
 
+# Production logging setup
+if os.getenv("ENVIRONMENT") == "production":
+    from production_logging import setup_production_logging
+    setup_production_logging()
+
 load_dotenv()
 
 # Get the directory where main.py is located
@@ -228,13 +233,36 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+# Get CORS origins from environment or use defaults
+cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:8000,http://localhost:8080,http://localhost:5000,http://localhost:3000,http://localhost:5173,http://localhost:5174").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8000", "http://localhost:8080", "http://localhost:5000", "http://localhost:3000", "http://localhost:5173", "http://localhost:5174"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+async def root():
+    """Root endpoint - Service information"""
+    return {
+        "service": "BHIV Bucket",
+        "version": BUCKET_VERSION,
+        "status": "running",
+        "environment": os.getenv("ENVIRONMENT", "development"),
+        "endpoints": {
+            "health": "/health",
+            "agents": "/agents",
+            "baskets": "/baskets",
+            "core_integration": "/core/stats",
+            "prana_telemetry": "/bucket/prana/stats",
+            "governance": "/governance/info",
+            "docs": "/docs"
+        },
+        "message": "BHIV Bucket service is running successfully!"
+    }
 
 @app.get("/health")
 async def health_check():
@@ -2627,5 +2655,5 @@ async def process_enhanced_query(request: EnhancedLegalQueryRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    port = int(os.getenv("FASTAPI_PORT", 8001))
+    port = int(os.getenv("PORT", os.getenv("FASTAPI_PORT", 8001)))
     uvicorn.run(app, host="0.0.0.0", port=port)

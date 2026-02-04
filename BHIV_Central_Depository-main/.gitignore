@@ -1,8 +1,8 @@
-# Environment variables
+# Environment files
 .env
-*.env
 .env.local
-.env.*.local
+.env.production
+.env.development
 
 # Python
 __pycache__/
@@ -26,32 +26,36 @@ wheels/
 .installed.cfg
 *.egg
 
-# Virtual environments
-venv/
-ENV/
-env/
+# Logs
+logs/
+*.log
+*.log.*
+
+# Database
+*.db
+*.sqlite3
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
-
-# Logs
-logs/*.log
-*.log
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Node modules
-node_modules/
-admin-panel/node_modules/
+# Temporary files
+tmp/
+temp/
+*.tmp
 
-# Redis dumps
-dump.rdb
+# Secrets
+secrets/
+credentials/
+*.key
+*.pem
 
-# MongoDB data
-data/
+# Local development
+local_config.py
+test_data/
