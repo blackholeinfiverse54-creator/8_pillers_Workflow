@@ -728,6 +728,21 @@ async def handle_task_request(payload: TaskPayload) -> dict:
             pass
         return {"task_id": task_id, "agent_output": error_output, "status": "error"}
 
+@app.get("/")
+async def root():
+    """Root endpoint - service info."""
+    return {
+        "service": "BHIV Core MCP Bridge",
+        "version": "2.0.0",
+        "status": "running",
+        "endpoints": {
+            "health": "/health",
+            "handle_task": "/handle_task",
+            "query_kb": "/query-kb",
+            "config": "/config"
+        }
+    }
+
 @app.post("/handle_task")
 async def handle_task(payload: TaskPayload):
     """Handle task via JSON payload."""
