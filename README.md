@@ -267,7 +267,7 @@ python test_insight_flow_integration.py
 **Test 9: Complete 8-Pillar Integration Test**
 ```bash
 # Run comprehensive 5-pillar integration test
-python test_complete_integration.py
+
 ```
 ✅ Expected: **8/8 tests passing (100% - Production Ready)**
 
